@@ -26,9 +26,8 @@
             min-height: 100vh;
 
             /* Foto de fundo */
-            background: linear-gradient(rgba(15, 16, 21, 0.65), rgba(15, 16, 21, 0.65)), 
-            url('/images/bg_login.jpg') no-repeat center center fixed;
-background-size: cover;
+            background: linear-gradient(rgba(15, 16, 21, 0.65), rgba(15, 16, 21, 0.65)),
+                        url('/images/bg_login.jpg') no-repeat center center fixed;
             background-size: cover;
         }
 
@@ -52,6 +51,14 @@ background-size: cover;
         .alert { background: #e55151; color: #fff; padding: 10px; border-radius: 6px; font-size: 0.85rem; margin-bottom: 15px; text-align: center; }
         .link { text-align: center; margin-top: 20px; font-size: 0.9rem; color: #9e9ea7; }
         .link a { color: var(--accent); text-decoration: none; }
+
+        /* RESPONSIVO */
+        @media (max-width: 480px) {
+            body { padding: 16px; align-items: flex-start; padding-top: 8vh; }
+            .auth-card { padding: 24px 20px; }
+            .logo { font-size: 1.5rem; }
+            input { font-size: 16px; } /* evita zoom automático no iOS */
+        }
     </style>
 </head>
 <body>

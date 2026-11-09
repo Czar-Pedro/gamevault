@@ -58,13 +58,13 @@
             <div class="form-group">
                 <label>Status</label>
                 <select th:field="*{status}">
-                    <option value="Na Fila">Na Fila</option>
                     <option value="Jogando">Jogando</option>
                     <option value="Zerado">Zerado</option>
+                    <option value="Backlog">Backlog</option>
                 </select>
             </div>
-            <div class="form-group"><label>Nota (1-10)</label><input type="number" th:field="*{nota}" min="1" max="10" required /></div>
-            <div class="form-group"><label>Horas Jogadas</label><input type="number" th:field="*{horasJogadas}" min="0" required /></div>
+            <div class="form-group"><label>Nota (0-10)</label><input type="number" th:field="*{nota}" min="0" max="10" /></div>
+            <div class="form-group"><label>Horas Jogadas</label><input type="number" th:field="*{horasJogadas}" min="0" /></div>
             <div class="form-group"><label>URL da Imagem de Capa</label><input type="url" th:field="*{capaUrl}" placeholder="https://..." /></div>
             <div class="actions">
                 <a href="/jogos" class="btn btn-cancel">Cancelar</a>

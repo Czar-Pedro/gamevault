@@ -236,12 +236,25 @@
             padding-top: 15px;
             border-top: 1px solid var(--border);
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .btn-delete {
-            color: var(--danger);
+        .btn-edit {
+            color: var(--accent);
             text-decoration: none;
+            font-size: 0.9rem;
+            transition: opacity 0.2s;
+        }
+
+        .btn-edit:hover { opacity: 0.8; }
+
+        .btn-delete {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            color: var(--danger);
             font-size: 0.9rem;
             transition: opacity 0.2s;
         }
@@ -259,6 +272,24 @@
             border-radius: 12px;
             border: 1px solid var(--border);
             color: #9e9ea7;
+        }
+
+        /* RESPONSIVO */
+        @media (max-width: 768px) {
+            body { padding: 12px; }
+            header { flex-direction: column; gap: 14px; padding: 16px; margin-bottom: 20px; }
+            nav { flex-wrap: wrap; justify-content: center; gap: 12px; }
+            .user-welcome { margin-right: 0; border-right: none; padding-right: 0; width: 100%; text-align: center; }
+            .form-section { padding: 18px; margin-bottom: 24px; }
+        }
+
+        @media (max-width: 480px) {
+            .logo { font-size: 1.5rem; }
+            .games-grid { grid-template-columns: 1fr; gap: 16px; }
+            .form-grid { grid-template-columns: 1fr; }
+            .form-group input, .form-group select { font-size: 16px; } /* evita zoom automático no iOS */
+            .card-banner { height: 160px; }
+            .empty-state { padding: 30px 16px; }
         }
     </style>
 </head>
@@ -345,9 +376,15 @@
                     <span><i class="fa-solid fa-clock"></i> <span th:text="${jogo.horasJogadas != null ? jogo.horasJogadas + 'h' : '0h'}">0h</span></span>
                 </div>
                 <div class="card-actions">
-                    <a th:href="@{/jogos/eliminar/{id}(id=${jogo.id})}" class="btn-delete" onclick="return confirm('Tem certeza que deseja remover este jogo?')">
-                        <i class="fa-solid fa-trash"></i> Remover
+                    <a th:href="@{/jogos/editar/{id}(id=${jogo.id})}" class="btn-edit">
+                        <i class="fa-solid fa-pen"></i> Editar
                     </a>
+                    <form th:action="@{/jogos/eliminar/{id}(id=${jogo.id})}" method="post"
+                          onsubmit="return confirm('Tem certeza que deseja remover este jogo?')">
+                        <button type="submit" class="btn-delete">
+                            <i class="fa-solid fa-trash"></i> Remover
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

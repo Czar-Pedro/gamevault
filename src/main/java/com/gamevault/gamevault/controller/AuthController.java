@@ -56,6 +56,7 @@ public class AuthController {
             return "registro";
         }
         
+        usuario.setId(null); // nunca aceitar id vindo do formulário (evita sobrescrever outra conta)
         usuario.setSenha(encoder.encode(usuario.getSenha())); // grava só o hash
         usuarioRepository.save(usuario);
         return "redirect:/login?sucesso";

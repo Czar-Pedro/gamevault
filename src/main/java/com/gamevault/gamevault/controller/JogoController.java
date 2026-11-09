@@ -76,6 +76,7 @@ public class JogoController {
             jogo.setCapaUrl("https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500&q=80");
         }
         
+        jogo.setId(null); // nunca aceitar id vindo do formulário (evita sobrescrever jogo de outro usuário)
         jogo.setUsuario(usuarioLogado); // Associa o jogo ao utilizador conectado
         repository.save(jogo);
         return "redirect:/jogos";
@@ -121,7 +122,7 @@ public class JogoController {
         return "redirect:/jogos";
     }
 
-    @GetMapping("/jogos/eliminar/{id}")
+    @PostMapping("/jogos/eliminar/{id}")
     public String eliminarJogo(@PathVariable Long id, HttpSession session) {
         Usuario usuarioLogado = (Usuario) session.getAttribute("usuarioLogado");
         if (usuarioLogado == null) return "redirect:/login";
