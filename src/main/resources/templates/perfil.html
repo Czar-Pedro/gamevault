@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameVault - Perfil</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-body: #0f1015;
+            --bg-card: #181920;
+            --bg-nav: #14151c;
+            --primary: #7b2cbf;
+            --accent: #00f5d4;
+            --text-main: #f1f1f1;
+            --text-muted: #9e9ea7;
+            --border-color: #272935;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', system-ui, sans-serif; background-color: var(--bg-body); color: var(--text-main); }
+
+        header {
+            background-color: var(--bg-nav); border-bottom: 1px solid var(--border-color);
+            padding: 15px 40px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--accent); display: flex; align-items: center; gap: 10px; }
+        nav { display: flex; gap: 20px; }
+        nav a { color: var(--text-muted); text-decoration: none; font-weight: 600; padding: 8px 16px; border-radius: 8px; }
+        nav a:hover, nav a.active { color: var(--text-main); background-color: var(--border-color); }
+
+        .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+
+        /* PERFIL CARD */
+        .profile-card {
+            background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border-color);
+            padding: 30px; display: flex; align-items: center; gap: 30px; margin-bottom: 30px;
+        }
+        .avatar {
+            width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(45deg, var(--primary), var(--accent));
+            display: flex; justify-content: center; align-items: center; font-size: 2.5rem; color: #fff;
+        }
+        .user-info h2 { font-size: 1.8rem; margin-bottom: 6px; }
+        .user-info p { color: var(--text-muted); font-size: 0.95rem; }
+
+        /* ESTATÍSTICAS GRID */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color);
+            padding: 20px; text-align: center;
+        }
+        .stat-card i { font-size: 1.8rem; color: var(--accent); margin-bottom: 10px; }
+        .stat-value { font-size: 2rem; font-weight: 800; color: #fff; }
+        .stat-label { color: var(--text-muted); font-size: 0.85rem; margin-top: 4px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo"><i class="fa-solid fa-gamepad"></i> GameVault</div>
+    <nav>
+    <a href="/jogos"><i class="fa-solid fa-layer-group"></i> Biblioteca</a>
+    <a href="/jogos/perfil"><i class="fa-solid fa-user"></i> Meu Perfil</a>
+    <a href="/logout" style="color: #ff4d4d;"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+</nav>
+</header>
+
+<div class="container">
+    <div class="profile-card">
+        <div class="avatar"><i class="fa-solid fa-user-ninja"></i></div>
+        <div class="user-info">
+            <h2>Player One</h2>
+            <p><i class="fa-solid fa-award" style="color: var(--accent);"></i> Colecionador de Jogos & Enthusiast</p>
+        </div>
+    </div>
+
+    <h3 style="margin-bottom: 20px;">Estatísticas da Conta (Base de Dados)</h3>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <i class="fa-solid fa-gamepad"></i>
+            <div class="stat-value" th:text="${totalJogos}">0</div>
+            <div class="stat-label">Jogos Cadastrados</div>
+        </div>
+        <div class="stat-card">
+            <i class="fa-solid fa-trophy"></i>
+            <div class="stat-value" th:text="${totalZerados}">0</div>
+            <div class="stat-label">Jogos Zerados</div>
+        </div>
+        <div class="stat-card">
+            <i class="fa-solid fa-clock"></i>
+            <div class="stat-value" th:text="${totalHoras}">0</div>
+            <div class="stat-label">Horas Totais</div>
+        </div>
+        <div class="stat-card">
+            <i class="fa-solid fa-star"></i>
+            <div class="stat-value" th:text="${mediaNotas}">0.0</div>
+            <div class="stat-label">Nota Média</div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

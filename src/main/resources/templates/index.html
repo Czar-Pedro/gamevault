@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameVault - Biblioteca</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-body: #0f1015;
+            --bg-card: #181920;
+            --bg-nav: #14151c;
+            --primary: #7b2cbf;
+            --primary-hover: #9d4edd;
+            --accent: #00f5d4;
+            --text-main: #f1f1f1;
+            --text-muted: #9e9ea7;
+            --border-color: #272935;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', system-ui, sans-serif; background-color: var(--bg-body); color: var(--text-main); }
+
+        /* NAV TOP BAR */
+        header {
+            background-color: var(--bg-nav);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky; top: 0; z-index: 100;
+        }
+
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--accent); display: flex; align-items: center; gap: 10px; }
+        nav { display: flex; gap: 20px; }
+        nav a {
+            color: var(--text-muted); text-decoration: none; font-weight: 600; padding: 8px 16px;
+            border-radius: 8px; transition: 0.3s;
+        }
+        nav a:hover, nav a.active { color: var(--text-main); background-color: var(--border-color); }
+
+        /* CONTAINER PRINCIPAL */
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .btn-add {
+            background-color: var(--primary); color: #fff; border: none; padding: 12px 24px;
+            border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px;
+            transition: 0.2s;
+        }
+        .btn-add:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
+
+        /* GRID ADAPTÁVEL DE JOGOS */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 24px;
+        }
+
+        .game-card {
+            background: var(--bg-card); border-radius: 12px; overflow: hidden;
+            border: 1px solid var(--border-color); transition: 0.3s ease; display: flex; flex-direction: column;
+        }
+        .game-card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 10px 20px rgba(123, 44, 191, 0.2); }
+        .card-img { width: 100%; height: 160px; object-fit: cover; }
+        .card-content { padding: 16px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .card-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+        .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+        .badge { background: #222430; font-size: 0.75rem; padding: 4px 8px; border-radius: 4px; color: var(--accent); }
+        .card-meta { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px; }
+        .btn-delete { color: #ff4d4d; text-decoration: none; font-size: 0.85rem; font-weight: 600; text-align: right; }
+
+        /* MODAL */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 200; }
+        .modal-content { background: var(--bg-card); padding: 30px; border-radius: 12px; width: 100%; max-width: 480px; border: 1px solid var(--border-color); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 6px; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; background: var(--bg-body); border: 1px solid var(--border-color); color: #fff; border-radius: 6px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo"><i class="fa-solid fa-gamepad"></i> GameVault</div>
+    <nav>
+    <a href="/jogos"><i class="fa-solid fa-layer-group"></i> Biblioteca</a>
+    <a href="/jogos/perfil"><i class="fa-solid fa-user"></i> Meu Perfil</a>
+    <a href="/logout" style="color: #ff4d4d;"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+</nav>
+</header>
+
+<div class="container">
+    <div class="page-header">
+        <h2>Sua Biblioteca</h2>
+        <button class="btn-add" onclick="toggleModal()"><i class="fa-solid fa-plus"></i> Adicionar Jogo</button>
+    </div>
+
+    <div class="games-grid">
+        <div class="game-card" th:each="j : ${listaJogos}">
+            <img class="card-img" th:src="${j.capaUrl}" alt="Capa">
+            <div class="card-content">
+                <div>
+                    <div class="card-title" th:text="${j.titulo}">Título</div>
+                    <div class="tags">
+                        <span class="badge" th:text="${j.plataforma}">Plataforma</span>
+                        <span class="badge" th:text="${j.genero}">Gênero</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="card-meta">
+                        <span><i class="fa-solid fa-star" style="color:#ffd166;"></i> <b th:text="${j.nota}">10</b>/10</span>
+                        <span><i class="fa-solid fa-clock"></i> <b th:text="${j.horasJogadas}">0</b>h</span>
+                        <span th:text="${j.status}">Status</span>
+                    </div>
+                    <a th:href="@{/jogos/eliminar/{id}(id=${j.id})}" class="btn-delete"><i class="fa-solid fa-trash"></i> Remover</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL FORMULÁRIO -->
+<div class="modal" id="gameModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Cadastrar Novo Jogo</h3>
+            <span style="cursor:pointer;" onclick="toggleModal()"><i class="fa-solid fa-xmark"></i></span>
+        </div>
+        <form th:action="@{/jogos}" th:object="${novoJogo}" method="post">
+            <div class="form-group"><label>Título</label><input type="text" th:field="*{titulo}" required /></div>
+            <div class="form-group"><label>Plataforma</label><input type="text" th:field="*{plataforma}" placeholder="ex: PC, PS5, Switch" required /></div>
+            <div class="form-group"><label>Gênero</label><input type="text" th:field="*{genero}" placeholder="ex: RPG, Ação" required /></div>
+            <div class="form-group">
+                <label>Status</label>
+                <select th:field="*{status}">
+                    <option value="Na Fila">Na Fila</option>
+                    <option value="Jogando">Jogando</option>
+                    <option value="Zerado">Zerado</option>
+                </select>
+            </div>
+            <div class="form-group"><label>Nota (1-10)</label><input type="number" th:field="*{nota}" min="1" max="10" required /></div>
+            <div class="form-group"><label>Horas Jogadas</label><input type="number" th:field="*{horasJogadas}" min="0" required /></div>
+            <div class="form-group"><label>URL da Imagem de Capa (Opcional)</label><input type="url" th:field="*{capaUrl}" placeholder="https://..." /></div>
+            <button type="submit" class="btn-add" style="width: 100%; justify-content: center; margin-top: 15px;">Salvar no Banco</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function toggleModal() {
+        const modal = document.getElementById('gameModal');
+        modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+    }
+</script>
+
+</body>
+</html>

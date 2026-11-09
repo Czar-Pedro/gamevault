@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameVault - Criar Conta</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --bg: #0f1015; --card: #181920; --primary: #7b2cbf; --accent: #00f5d4; --text: #f1f1f1; --border: #272935; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .auth-card { background: var(--card); padding: 40px; border-radius: 12px; border: 1px solid var(--border); width: 100%; max-width: 400px; }
+        .logo { font-size: 1.8rem; font-weight: 800; color: var(--accent); text-align: center; margin-bottom: 24px; }
+        .form-group { margin-bottom: 16px; }
+        label { display: block; font-size: 0.85rem; color: #9e9ea7; margin-bottom: 6px; }
+        input { width: 100%; padding: 12px; background: var(--bg); border: 1px solid var(--border); color: #fff; border-radius: 6px; }
+        button { width: 100%; background: var(--primary); color: #fff; border: none; padding: 12px; border-radius: 6px; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        button:hover { opacity: 0.9; }
+        .alert { background: #e55151; color: #fff; padding: 10px; border-radius: 6px; font-size: 0.85rem; margin-bottom: 15px; text-align: center; }
+        .link { text-align: center; margin-top: 20px; font-size: 0.9rem; color: #9e9ea7; }
+        .link a { color: var(--accent); text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<div class="auth-card">
+    <div class="logo"><i class="fa-solid fa-gamepad"></i> GameVault</div>
+    <h3 style="text-align: center; margin-bottom: 20px;">Criar Nova Conta</h3>
+
+    <div th:if="${erro}" class="alert" th:text="${erro}"></div>
+
+    <form th:action="@{/registro}" th:object="${usuario}" method="post">
+        <div class="form-group">
+            <label>Nome de Exibição</label>
+            <input type="text" th:field="*{nomeExibicao}" required placeholder="ex: Player One" />
+        </div>
+        <div class="form-group">
+            <label>Usuário (Login)</label>
+            <input type="text" th:field="*{username}" required placeholder="ex: player1" />
+        </div>
+        <div class="form-group">
+            <label>Senha</label>
+            <input type="password" th:field="*{senha}" required placeholder="Sua senha" />
+        </div>
+        <button type="submit">Cadastrar</button>
+    </form>
+
+    <div class="link">
+        Já tem conta? <a href="/login">Faça Login</a>
+    </div>
+</div>
+
+</body>
+</html>
