@@ -3,180 +3,356 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GameVault - Biblioteca</title>
+    <title>GameVault - Minha Biblioteca</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-body: #0f1015;
-            --bg-card: #181920;
-            --bg-nav: #14151c;
+            --bg: #0f1015;
+            --card: rgba(24, 25, 32, 0.85);
             --primary: #7b2cbf;
-            --primary-hover: #9d4edd;
             --accent: #00f5d4;
-            --text-main: #f1f1f1;
-            --text-muted: #9e9ea7;
-            --border-color: #272935;
+            --text: #f1f1f1;
+            --border: #272935;
+            --danger: #ff4d4d;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', system-ui, sans-serif; background-color: var(--bg-body); color: var(--text-main); }
 
-        /* NAV TOP BAR */
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            color: var(--text);
+            padding: 20px;
+            min-height: 100vh;
+
+            /* Imagem de fundo com overlay escuro */
+            background-color: var(--bg);
+            background-image: linear-gradient(rgba(15, 16, 21, 0.75), rgba(15, 16, 21, 0.75)), 
+                              url('/images/bg_login.jpg');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: transparent !important;
+        }
+
+        /* HEADER & NAVEGAÇÃO */
         header {
-            background-color: var(--bg-nav);
-            border-bottom: 1px solid var(--border-color);
-            padding: 15px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky; top: 0; z-index: 100;
+            padding: 20px 30px;
+            background: rgba(24, 25, 32, 0.85) !important;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         }
 
-        .logo { font-size: 1.5rem; font-weight: 800; color: var(--accent); display: flex; align-items: center; gap: 10px; }
-        nav { display: flex; gap: 20px; }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
         nav a {
-            color: var(--text-muted); text-decoration: none; font-weight: 600; padding: 8px 16px;
-            border-radius: 8px; transition: 0.3s;
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        nav a:hover, nav a.active { color: var(--text-main); background-color: var(--border-color); }
 
-        /* CONTAINER PRINCIPAL */
-        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
-        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .btn-add {
-            background-color: var(--primary); color: #fff; border: none; padding: 12px 24px;
-            border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px;
-            transition: 0.2s;
+        nav a:hover {
+            color: var(--accent);
         }
-        .btn-add:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
 
-        /* GRID ADAPTÁVEL DE JOGOS */
+        .user-welcome {
+            font-size: 0.9rem;
+            color: #9e9ea7;
+            margin-right: 15px;
+            border-right: 1px solid var(--border);
+            padding-right: 15px;
+        }
+
+        .user-welcome span {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* FORMULÁRIO DE CADASTRO */
+        .form-section {
+            background: rgba(24, 25, 32, 0.85) !important;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .form-section h2 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            color: #9e9ea7;
+        }
+
+        .form-group input, .form-group select {
+            padding: 12px;
+            background: rgba(15, 16, 21, 0.8);
+            border: 1px solid var(--border);
+            color: #fff;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .btn-submit {
+            grid-column: 1 / -1;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            opacity: 0.9;
+        }
+
+        /* GRELHA DE JOGOS (CARDS) */
         .games-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 24px;
+            gap: 25px;
         }
 
         .game-card {
-            background: var(--bg-card); border-radius: 12px; overflow: hidden;
-            border: 1px solid var(--border-color); transition: 0.3s ease; display: flex; flex-direction: column;
-        }
-        .game-card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 10px 20px rgba(123, 44, 191, 0.2); }
-        .card-img { width: 100%; height: 160px; object-fit: cover; }
-        .card-content { padding: 16px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .card-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
-        .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
-        .badge { background: #222430; font-size: 0.75rem; padding: 4px 8px; border-radius: 4px; color: var(--accent); }
-        .card-meta { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px; }
-        .btn-delete { color: #ff4d4d; text-decoration: none; font-size: 0.85rem; font-weight: 600; text-align: right; }
-
-        /* MODAL */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 200; }
-        .modal-content { background: var(--bg-card); padding: 30px; border-radius: 12px; width: 100%; max-width: 480px; border: 1px solid var(--border-color); }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .form-group { margin-bottom: 14px; }
-        .form-group label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 6px; }
-        .form-group input, .form-group select { width: 100%; padding: 10px; background: var(--bg-body); border: 1px solid var(--border-color); color: #fff; border-radius: 6px; }
-
-        .card-actions { display: flex; justify-content: space-between; align-items: center; }
-        .btn-edit { color: var(--accent); text-decoration: none; font-size: 0.85rem; font-weight: 600; }
-
-                /* RESPONSIVO */
-        @media (max-width: 768px) {
-            header { padding: 12px 16px; flex-wrap: wrap; gap: 10px; }
-            nav { gap: 6px; flex-wrap: wrap; }
-            nav a { padding: 6px 10px; font-size: 0.9rem; }
-            .container { margin: 24px auto; }
-            .page-header { flex-direction: column; align-items: stretch; gap: 14px; }
-            .btn-add { justify-content: center; }
-            .modal { align-items: flex-start; overflow-y: auto; padding: 16px; }
-            .modal-content { padding: 20px; }
+            background: rgba(24, 25, 32, 0.85) !important;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        @media (max-width: 480px) {
-            .games-grid { grid-template-columns: 1fr; }
-            .logo { font-size: 1.25rem; }
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
         }
-        
+
+        .card-banner {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            gap: 10px;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .card-info {
+            font-size: 0.85rem;
+            color: #9e9ea7;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            width: fit-content;
+        }
+
+        .badge-zerado { background: rgba(0, 245, 212, 0.2); color: var(--accent); }
+        .badge-jogando { background: rgba(123, 44, 191, 0.3); color: #c77dff; }
+        .badge-backlog { background: rgba(255, 255, 255, 0.1); color: #ccc; }
+
+        .card-actions {
+            margin-top: auto;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-delete {
+            color: var(--danger);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: opacity 0.2s;
+        }
+
+        .btn-delete:hover {
+            opacity: 0.8;
+        }
+
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 50px;
+            background: rgba(24, 25, 32, 0.85) !important;
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            color: #9e9ea7;
+        }
     </style>
 </head>
 <body>
 
-<header>
-    <div class="logo"><i class="fa-solid fa-gamepad"></i> GameVault</div>
-    <nav>
-    <a href="/jogos"><i class="fa-solid fa-layer-group"></i> Biblioteca</a>
-    <a href="/jogos/perfil"><i class="fa-solid fa-user"></i> Meu Perfil</a>
-    <a href="/logout" style="color: #ff4d4d;"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
-</nav>
-</header>
-
 <div class="container">
-    <div class="page-header">
-        <h2>Sua Biblioteca</h2>
-        <button class="btn-add" onclick="toggleModal()"><i class="fa-solid fa-plus"></i> Adicionar Jogo</button>
-    </div>
-
-    <div class="games-grid">
-        <div class="game-card" th:each="j : ${listaJogos}">
-            <img class="card-img" th:src="${j.capaUrl}" alt="Capa">
-            <div class="card-content">
-                <div>
-                    <div class="card-title" th:text="${j.titulo}">Título</div>
-                    <div class="tags">
-                        <span class="badge" th:text="${j.plataforma}">Plataforma</span>
-                        <span class="badge" th:text="${j.genero}">Gênero</span>
-                    </div>
-                </div>
-                <div>
-                    <div class="card-meta">
-                        <span><i class="fa-solid fa-star" style="color:#ffd166;"></i> <b th:text="${j.nota}">10</b>/10</span>
-                        <span><i class="fa-solid fa-clock"></i> <b th:text="${j.horasJogadas}">0</b>h</span>
-                        <span th:text="${j.status}">Status</span>
-                    </div>
-                    <div class="card-actions">
-    <a th:href="@{/jogos/editar/{id}(id=${j.id})}" class="btn-edit"><i class="fa-solid fa-pen"></i> Editar</a>
-    <a th:href="@{/jogos/eliminar/{id}(id=${j.id})}" class="btn-delete"><i class="fa-solid fa-trash"></i> Remover</a>
-</div>
-                </div>
+    <!-- HEADER -->
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-gamepad"></i> GameVault
+        </div>
+        <nav>
+            <div class="user-welcome" th:if="${usuarioLogado != null}">
+                Olá, <span th:text="${usuarioLogado.nomeExibicao}">Player</span>
             </div>
-        </div>
-    </div>
-</div>
+            <a href="/jogos"><i class="fa-solid fa-layer-group"></i> Biblioteca</a>
+            <a href="/jogos/perfil"><i class="fa-solid fa-user"></i> Meu Perfil</a>
+            <a href="/logout" style="color: var(--danger);"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+        </nav>
+    </header>
 
-<!-- MODAL FORMULÁRIO -->
-<div class="modal" id="gameModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>Cadastrar Novo Jogo</h3>
-            <span style="cursor:pointer;" onclick="toggleModal()"><i class="fa-solid fa-xmark"></i></span>
-        </div>
+    <!-- FORMULÁRIO PARA ADICIONAR JOGO -->
+    <section class="form-section">
+        <h2><i class="fa-solid fa-plus-circle"></i> Adicionar Novo Jogo</h2>
         <form th:action="@{/jogos}" th:object="${novoJogo}" method="post">
-            <div class="form-group"><label>Título</label><input type="text" th:field="*{titulo}" required /></div>
-            <div class="form-group"><label>Plataforma</label><input type="text" th:field="*{plataforma}" placeholder="ex: PC, PS5, Switch" required /></div>
-            <div class="form-group"><label>Gênero</label><input type="text" th:field="*{genero}" placeholder="ex: RPG, Ação" required /></div>
-            <div class="form-group">
-                <label>Status</label>
-                <select th:field="*{status}">
-                    <option value="Na Fila">Na Fila</option>
-                    <option value="Jogando">Jogando</option>
-                    <option value="Zerado">Zerado</option>
-                </select>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Título do Jogo</label>
+                    <input type="text" th:field="*{titulo}" required placeholder="ex: Elden Ring" />
+                </div>
+                <div class="form-group">
+                    <label>Plataforma</label>
+                    <input type="text" th:field="*{plataforma}" required placeholder="ex: PC, PS5, Xbox" />
+                </div>
+                <div class="form-group">
+                    <label>Gênero</label>
+                    <input type="text" th:field="*{genero}" required placeholder="ex: RPG, Ação" />
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select th:field="*{status}">
+                        <option value="Jogando">Jogando</option>
+                        <option value="Zerado">Zerado</option>
+                        <option value="Backlog">Backlog</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Nota (0-10)</label>
+                    <input type="number" min="0" max="10" th:field="*{nota}" placeholder="ex: 9" />
+                </div>
+                <div class="form-group">
+                    <label>Horas Jogadas</label>
+                    <input type="number" min="0" th:field="*{horasJogadas}" placeholder="ex: 45" />
+                </div>
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label>URL da Capa (Opcional)</label>
+                    <input type="url" th:field="*{capaUrl}" placeholder="https://exemplo.com/imagem.jpg" />
+                </div>
+                <button type="submit" class="btn-submit">Salvar Jogo na Biblioteca</button>
             </div>
-            <div class="form-group"><label>Nota (1-10)</label><input type="number" th:field="*{nota}" min="1" max="10" required /></div>
-            <div class="form-group"><label>Horas Jogadas</label><input type="number" th:field="*{horasJogadas}" min="0" required /></div>
-            <div class="form-group"><label>URL da Imagem de Capa (Opcional)</label><input type="url" th:field="*{capaUrl}" placeholder="https://..." /></div>
-            <button type="submit" class="btn-add" style="width: 100%; justify-content: center; margin-top: 15px;">Salvar no Banco</button>
         </form>
-    </div>
-</div>
+    </section>
 
-<script>
-    function toggleModal() {
-        const modal = document.getElementById('gameModal');
-        modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
-    }
-</script>
+    <!-- LISTA / GRELHA DE JOGOS DO USUÁRIO -->
+    <main class="games-grid">
+        <div th:if="${#lists.isEmpty(listaJogos)}" class="empty-state">
+            <i class="fa-solid fa-ghost fa-3x" style="margin-bottom: 15px; display: block;"></i>
+            <p>Sua biblioteca está vazia. Adicione o seu primeiro jogo acima!</p>
+        </div>
+
+        <div th:each="jogo : ${listaJogos}" class="game-card">
+            <img th:src="${jogo.capaUrl}" alt="Capa do Jogo" class="card-banner" />
+            <div class="card-body">
+                <span class="badge" 
+                      th:classappend="${jogo.status == 'Zerado' ? 'badge-zerado' : (jogo.status == 'Jogando' ? 'badge-jogando' : 'badge-backlog')}"
+                      th:text="${jogo.status}">Status</span>
+                <h3 class="card-title" th:text="${jogo.titulo}">Título</h3>
+                <div class="card-info">
+                    <span th:text="${jogo.plataforma}">Plataforma</span>
+                    <span th:text="${jogo.genero}">Gênero</span>
+                </div>
+                <div class="card-info" style="margin-top: 5px;">
+                    <span><i class="fa-solid fa-star" style="color: #ffd166;"></i> <span th:text="${jogo.nota != null ? jogo.nota + '/10' : 'N/A'}">10/10</span></span>
+                    <span><i class="fa-solid fa-clock"></i> <span th:text="${jogo.horasJogadas != null ? jogo.horasJogadas + 'h' : '0h'}">0h</span></span>
+                </div>
+                <div class="card-actions">
+                    <a th:href="@{/jogos/eliminar/{id}(id=${jogo.id})}" class="btn-delete" onclick="return confirm('Tem certeza que deseja remover este jogo?')">
+                        <i class="fa-solid fa-trash"></i> Remover
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
 
 </body>
 </html>
