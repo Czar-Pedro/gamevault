@@ -81,11 +81,57 @@ public class JogoController {
         return "redirect:/jogos";
     }
 
-    // ESCRITA: REMOÇÃO
+        // LEITURA: abre o formulário de edição com os dados atuais do jogo
+    @GetMapping("/jogos/editar/{id}")
+    public String editarForm(@PathVariable Long id, Model model, HttpSession session) {
+        Usuario usuarioLogado = (Usuario) session.getAttribute("usuarioLogado");
+        if (usuarioLogado == null) return "redirect:/login";
+
+        Jogo jogo = repository.findById(id).orElse(null);
+        if (jogo == null || jogo.getUsuario() == null
+                || !jogo.getUsuario().getId().equals(usuarioLogado.getId())) {
+            return "redirect:/jogos"; // não existe ou não é dele
+        }
+
+        model.addAttribute("jogo", jogo);
+        model.addAttribute("usuarioLogado", usuarioLogado);
+        return "editar";
+    }
+
+    // ESCRITA: atualiza o jogo (só se pertencer ao utilizador logado)
+    @PostMapping("/jogos/editar/{id}")
+    public String atualizarJogo(@PathVariable Long id, @ModelAttribute("jogo") Jogo dados, HttpSession session) {
+        Usuario usuarioLogado = (Usuario) session.getAttribute("usuarioLogado");
+        if (usuarioLogado == null) return "redirect:/login";
+
+        repository.findById(id).ifPresent(jogo -> {
+            if (jogo.getUsuario() != null && jogo.getUsuario().getId().equals(usuarioLogado.getId())) {
+                jogo.setTitulo(dados.getTitulo());
+                jogo.setPlataforma(dados.getPlataforma());
+                jogo.setGenero(dados.getGenero());
+                jogo.setStatus(dados.getStatus());
+                jogo.setNota(dados.getNota());
+                jogo.setHorasJogadas(dados.getHorasJogadas());
+                if (dados.getCapaUrl() != null && !dados.getCapaUrl().isBlank()) {
+                    jogo.setCapaUrl(dados.getCapaUrl());
+                }
+                repository.save(jogo);
+            }
+        });
+        return "redirect:/jogos";
+    }
+
     @GetMapping("/jogos/eliminar/{id}")
     public String eliminarJogo(@PathVariable Long id, HttpSession session) {
-        if (session.getAttribute("usuarioLogado") == null) return "redirect:/login";
-        repository.deleteById(id);
+        Usuario usuarioLogado = (Usuario) session.getAttribute("usuarioLogado");
+        if (usuarioLogado == null) return "redirect:/login";
+
+        // LEITURA + ESCRITA: só remove se o jogo pertencer ao utilizador logado
+        repository.findById(id).ifPresent(jogo -> {
+            if (jogo.getUsuario() != null && jogo.getUsuario().getId().equals(usuarioLogado.getId())) {
+                repository.deleteById(id);
+            }
+        });
         return "redirect:/jogos";
     }
 }

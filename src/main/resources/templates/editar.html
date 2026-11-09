@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameVault - Editar Jogo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --bg: #0f1015; --card: #181920; --nav: #14151c; --primary: #7b2cbf; --accent: #00f5d4; --text: #f1f1f1; --muted: #9e9ea7; --border: #272935; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); }
+        header { background: var(--nav); border-bottom: 1px solid var(--border); padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--accent); display: flex; align-items: center; gap: 10px; }
+        nav { display: flex; gap: 20px; }
+        nav a { color: var(--muted); text-decoration: none; font-weight: 600; padding: 8px 16px; border-radius: 8px; }
+        nav a:hover { color: var(--text); background: var(--border); }
+        .container { max-width: 520px; margin: 40px auto; padding: 0 20px; }
+        .form-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 30px; }
+        .form-card h2 { margin-bottom: 20px; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 6px; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; background: var(--bg); border: 1px solid var(--border); color: #fff; border-radius: 6px; }
+        .actions { display: flex; gap: 12px; margin-top: 20px; }
+        .btn { flex: 1; text-align: center; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; border: none; text-decoration: none; font-size: 1rem; }
+        .btn-save { background: var(--primary); color: #fff; }
+        .btn-cancel { background: var(--border); color: var(--text); }
+
+        @media (max-width: 768px) {
+            header { padding: 12px 16px; flex-wrap: wrap; gap: 10px; }
+            nav { gap: 6px; flex-wrap: wrap; }
+            nav a { padding: 6px 10px; font-size: 0.9rem; }
+            .container { margin: 24px auto; }
+        }
+        @media (max-width: 480px) {
+            .form-card { padding: 20px; }
+            .form-group input, .form-group select { font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo"><i class="fa-solid fa-gamepad"></i> GameVault</div>
+    <nav>
+        <a href="/jogos"><i class="fa-solid fa-layer-group"></i> Biblioteca</a>
+        <a href="/jogos/perfil"><i class="fa-solid fa-user"></i> Meu Perfil</a>
+        <a href="/logout" style="color: #ff4d4d;"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="form-card">
+        <h2>Editar Jogo</h2>
+        <form th:action="@{/jogos/editar/{id}(id=${jogo.id})}" th:object="${jogo}" method="post">
+            <div class="form-group"><label>Título</label><input type="text" th:field="*{titulo}" required /></div>
+            <div class="form-group"><label>Plataforma</label><input type="text" th:field="*{plataforma}" required /></div>
+            <div class="form-group"><label>Gênero</label><input type="text" th:field="*{genero}" required /></div>
+            <div class="form-group">
+                <label>Status</label>
+                <select th:field="*{status}">
+                    <option value="Na Fila">Na Fila</option>
+                    <option value="Jogando">Jogando</option>
+                    <option value="Zerado">Zerado</option>
+                </select>
+            </div>
+            <div class="form-group"><label>Nota (1-10)</label><input type="number" th:field="*{nota}" min="1" max="10" required /></div>
+            <div class="form-group"><label>Horas Jogadas</label><input type="number" th:field="*{horasJogadas}" min="0" required /></div>
+            <div class="form-group"><label>URL da Imagem de Capa</label><input type="url" th:field="*{capaUrl}" placeholder="https://..." /></div>
+            <div class="actions">
+                <a href="/jogos" class="btn btn-cancel">Cancelar</a>
+                <button type="submit" class="btn btn-save">Salvar alterações</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

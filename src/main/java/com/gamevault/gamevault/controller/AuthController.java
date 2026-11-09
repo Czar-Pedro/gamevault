@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
 
@@ -13,6 +14,7 @@ import java.util.Optional;
 public class AuthController {
 
     private final UsuarioRepository usuarioRepository;
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public AuthController(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
@@ -28,9 +30,9 @@ public class AuthController {
     // Processar Login (LEITURA no Banco)
     @PostMapping("/login")
     public String realizarLogin(@ModelAttribute Usuario usuario, HttpSession session, Model model) {
-        Optional<Usuario> userBanco = usuarioRepository.findByUsernameAndSenha(usuario.getUsername(), usuario.getSenha());
+            Optional<Usuario> userBanco = usuarioRepository.findByUsername(usuario.getUsername());
 
-        if (userBanco.isPresent()) {
+        if (userBanco.isPresent() && encoder.matches(usuario.getSenha(), userBanco.get().getSenha())) {
             session.setAttribute("usuarioLogado", userBanco.get());
             return "redirect:/jogos";
         } else {
@@ -54,6 +56,7 @@ public class AuthController {
             return "registro";
         }
         
+        usuario.setSenha(encoder.encode(usuario.getSenha())); // grava só o hash
         usuarioRepository.save(usuario);
         return "redirect:/login?sucesso";
     }
